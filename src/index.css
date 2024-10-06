@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hexagon {
+  @apply w-16 h-9 relative flex items-center justify-center;
+  clip-path: polygon(25% 6.69873%, 75% 6.69873%, 100% 50%, 75% 93.30127%, 25% 93.30127%, 0% 50%);
+  background-color: #3490dc;
+  color: white;
+}
