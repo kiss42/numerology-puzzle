@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/numerology-puzzle/static/css/main.9965531d.css",
-    "main.js": "/numerology-puzzle/static/js/main.91206294.js",
+    "main.css": "/numerology-puzzle/static/css/main.0430fca7.css",
+    "main.js": "/numerology-puzzle/static/js/main.4015fcac.js",
     "index.html": "/numerology-puzzle/index.html",
-    "main.9965531d.css.map": "/numerology-puzzle/static/css/main.9965531d.css.map",
-    "main.91206294.js.map": "/numerology-puzzle/static/js/main.91206294.js.map"
+    "main.0430fca7.css.map": "/numerology-puzzle/static/css/main.0430fca7.css.map",
+    "main.4015fcac.js.map": "/numerology-puzzle/static/js/main.4015fcac.js.map"
   },
   "entrypoints": [
-    "static/css/main.9965531d.css",
-    "static/js/main.91206294.js"
+    "static/css/main.0430fca7.css",
+    "static/js/main.4015fcac.js"
   ]
 }
