@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PuzzleInstruction from "./PuzzleInstruction";  
-import { calculatePuzzleTwoAnswers } from "../utilities/puzzleLogic";  
 import { displayHearts, reduceLives } from "../utilities/heart";  // Corrected imports
 import HintButton from "./HintButton";  // Import the HintButton
-
 
 function PuzzleTwo() {
   const hint = "Check how the numbers are connected. You might be able to guess the missing ones by looking at their neighbors!";
@@ -18,6 +16,24 @@ function PuzzleTwo() {
   const [lives, setLives] = useState(5);  // Initial lives (hearts)
   const [showAnswers, setShowAnswers] = useState(false);  
   const [submitted, setSubmitted] = useState(false);  
+  const [numbers, setNumbers] = useState([]);
+  const [correctAnswer1, setCorrectAnswer1] = useState(null);
+  const [correctAnswer2, setCorrectAnswer2] = useState(null);
+
+  // Generate random numbers when the component mounts
+  useEffect(() => {
+    const base = Math.floor(Math.random() * 50) + 10; // Generate a random base number
+    const generatedNumbers = [
+      base,         // Start with base number
+      base + 14,    // Add 14
+      base + 12,    // Add 12
+      base + 9,     // Add 9
+      base + 7,     // Add 7
+    ];
+    setNumbers(generatedNumbers);
+    setCorrectAnswer1(base + 5); // Set the first missing number
+    setCorrectAnswer2(base + 19); // Set the second missing number
+  }, []);
 
   const handleChange = (e) => {
     setInputs({
@@ -30,10 +46,16 @@ function PuzzleTwo() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const feedback = calculatePuzzleTwoAnswers(inputs);  // Use Puzzle Two logic
+    // Check if inputs match correct answers
+    const feedback = {
+      correct1: parseInt(inputs.missing1) === correctAnswer1,
+      correct2: parseInt(inputs.missing2) === correctAnswer2,
+      correctAnswer1,
+      correctAnswer2
+    };
     
     if (!feedback.correct1 || !feedback.correct2) {
-      setLives(reduceLives(lives));  // Use correct utility function
+      setLives(reduceLives(lives));  // Use correct utility function to reduce lives
     }
 
     setFeedback(feedback);
@@ -50,6 +72,7 @@ function PuzzleTwo() {
     setLives(5);  
     setShowAnswers(false);
     setSubmitted(false);  
+    window.location.reload(); // Reload the page to reset puzzle
   };
 
   return (
@@ -67,19 +90,19 @@ function PuzzleTwo() {
       <div className="relative mt-6">
         {/* Layout of puzzle goes here */}
         <div className="flex justify-center items-center mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">54</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[0]}</div>
         </div>
 
         <div className="flex justify-center items-center space-x-8 mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">28</div>
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">26</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[1]}</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[2]}</div>
         </div>
 
         <div className="flex justify-center items-center space-x-8 mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">15</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[3]}</div>
           <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">
             {showAnswers ? (
-              <span>{feedback.correctAnswer1}</span>  // Show correct answer
+              <span>{correctAnswer1}</span>  // Show correct answer
             ) : (
               <input
                 type="number"
@@ -96,7 +119,7 @@ function PuzzleTwo() {
         <div className="flex justify-center items-center space-x-8 mb-8">
           <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">
             {showAnswers ? (
-              <span>{feedback.correctAnswer2}</span>  // Show correct answer
+              <span>{correctAnswer2}</span>  // Show correct answer
             ) : (
               <input
                 type="number"
@@ -108,7 +131,7 @@ function PuzzleTwo() {
               />
             )}
           </div>
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">12</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[4]}</div>
         </div>
 
         {!showAnswers && (

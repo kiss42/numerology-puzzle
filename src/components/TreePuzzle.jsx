@@ -1,18 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Instruction from "./PuzzleInstruction";  // Import the Instruction component
 import HintButton from "./HintButton";  // Import the HintButton
 
-
-
-// Function to calculate or check for correct answers (based on specific logic/rules)
-const calculateMissingNumbers = (inputs) => {
-  const correctAnswer1 = 9;  // Replace with actual logic
-  const correctAnswer2 = 13;  // Replace with actual logic
-
+// Function to calculate or check for correct answers based on specific logic
+const calculateMissingNumbers = (inputs, correctAnswer1, correctAnswer2) => {
   return {
     correct1: parseInt(inputs.missing1) === correctAnswer1,
     correct2: parseInt(inputs.missing2) === correctAnswer2,
-    correctAnswer1,  // Pass the correct answers along for later use
+    correctAnswer1,
     correctAnswer2,
   };
 };
@@ -31,6 +26,26 @@ function NumerologyTreePuzzle() {
   const [lives, setLives] = useState(5);  // Initial lives (hearts)
   const [showAnswers, setShowAnswers] = useState(false);  // Track if answers should be shown
   const [submitted, setSubmitted] = useState(false);  // Track whether the form was submitted
+  const [numbers, setNumbers] = useState([]);
+  const [correctAnswer1, setCorrectAnswer1] = useState(null);
+  const [correctAnswer2, setCorrectAnswer2] = useState(null);
+
+  // Generate random numbers when the component mounts
+  useEffect(() => {
+    const base = Math.floor(Math.random() * 50) + 10; // Generate random base number
+    const generatedNumbers = [
+      72,              // Static number
+      base + 17,       // Random number + pattern
+      99,              // Static number
+      base + 8,        // Random number + pattern
+      base + 20,       // Random number + pattern
+      base + 10,       // Random number + pattern
+      base + 15,       // Random number + pattern
+    ];
+    setNumbers(generatedNumbers);
+    setCorrectAnswer1(base + 9);  // Dynamic correct answer
+    setCorrectAnswer2(base + 13); // Dynamic correct answer
+  }, []);
 
   const handleChange = (e) => {
     setInputs({
@@ -44,7 +59,7 @@ function NumerologyTreePuzzle() {
     e.preventDefault();
 
     // Calculate feedback for current input
-    const feedback = calculateMissingNumbers(inputs);
+    const feedback = calculateMissingNumbers(inputs, correctAnswer1, correctAnswer2);
     
     if (!feedback.correct1 || !feedback.correct2) {
       setLives(lives - 1);  // Reduce lives if the answer is wrong
@@ -66,6 +81,7 @@ function NumerologyTreePuzzle() {
     setLives(5);  // Reset lives
     setShowAnswers(false);
     setSubmitted(false);  // Reset submission status
+    window.location.reload();  // Reload to generate a new set of numbers
   };
 
   return (
@@ -85,25 +101,25 @@ function NumerologyTreePuzzle() {
       <div className="relative mt-6">
         {/* Row 1 */}
         <div className="flex justify-center items-center mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">72</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[0]}</div>
         </div>
 
         {/* Row 2 */}
         <div className="flex justify-center items-center space-x-8 mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">27</div>
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">99</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[1]}</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[2]}</div>
         </div>
 
         {/* Row 3 */}
         <div className="flex justify-center items-center space-x-8 mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">18</div>
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">45</div>
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">39</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[3]}</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[4]}</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[5]}</div>
         </div>
 
         {/* Row 4 */}
         <div className="flex justify-center items-center space-x-8 mb-8">
-          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">21</div>
+          <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">{numbers[6]}</div>
           {/* First missing number */}
           <div className="bg-blue-300 w-16 h-16 rounded-full flex items-center justify-center text-xl">
             {showAnswers ? (
@@ -149,13 +165,13 @@ function NumerologyTreePuzzle() {
               type="submit"
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             >
-              
               Check Answers
             </button>
           </form>
-          
         )}
-          <HintButton hint={hint} />
+
+        {/* Hint Button */}
+        <HintButton hint={hint} />
 
         {/* Reset button after showing answers */}
         {showAnswers && (

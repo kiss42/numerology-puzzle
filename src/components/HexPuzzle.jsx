@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { displayHearts, reduceLives } from "../utilities/heart";  // Importing lives logic
 import HintButton from "./HintButton";  // Import the HintButton
 
-
 function HexPuzzle() {
-  const hint = "Hint: Look at the numbers near the missing one. Do they add up or subtract in a way that might help you find the missing number? Try simple addition or subtraction.";
+  const [numbers, setNumbers] = useState([]);
   const [missingNumber, setMissingNumber] = useState("");
   const [lives, setLives] = useState(5);
   const [showAnswer, setShowAnswer] = useState(false);
-  const correctAnswer = 29;  // Example correct answer
+  const [correctAnswer, setCorrectAnswer] = useState(null);
+
+  // Generate random base number and numbers that follow the same pattern
+  useEffect(() => {
+    const base = Math.floor(Math.random() * 10) + 10; // Generate random base number between 10 and 20
+    const generatedNumbers = [
+      base,         // Row 1 numbers
+      base + 3,     // Incremented by 3
+      base + 5,     // Incremented by 5
+      base + 8,     // Incremented by 8
+      base + 10,    // Incremented by 10
+      base + 6,     // Row 2 numbers
+      base + 14,    // Incremented by 14
+      base + 19,    // Incremented by 19
+      base + 24,    // Incremented by 24
+    ];
+    setCorrectAnswer(base + 29);  // The missing number is base + 29
+    setNumbers(generatedNumbers);
+  }, []);
+
+  const hint = "Hint: Look at how each number increases by a fixed amount. Try figuring out the pattern!";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,6 +46,7 @@ function HexPuzzle() {
     setMissingNumber("");
     setLives(5);
     setShowAnswer(false);
+    window.location.reload();  // Reload page to reset the puzzle
   };
 
   return (
@@ -39,17 +59,17 @@ function HexPuzzle() {
       {/* Hexagonal Puzzle */}
       <div className="grid grid-cols-5 gap-4">
         {/* Row 1 */}
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">5</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">8</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">7</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">9</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">6</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[0]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[1]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[2]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[3]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[4]}</div>
 
         {/* Row 2 */}
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">14</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">14</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">19</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">24</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[5]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[6]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[7]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[8]}</div>
         <div className="hexagon bg-blue-500 text-white flex items-center justify-center">
           {showAnswer ? (
             <span>{correctAnswer}</span>
@@ -65,11 +85,11 @@ function HexPuzzle() {
         </div>
 
         {/* Row 3 */}
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">3</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">2</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">4</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">5</div>
-        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">4</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[0]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[1]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[2]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[3]}</div>
+        <div className="hexagon bg-blue-500 text-white flex items-center justify-center">{numbers[4]}</div>
       </div>
 
       {!showAnswer && (
@@ -82,7 +102,6 @@ function HexPuzzle() {
           </button>
         </form>
       )}
-
 
       {/* Hint Button */}
       <HintButton hint={hint} />

@@ -12,7 +12,7 @@ function App() {
       
       {/* Title at the top */}
       <header className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">Numerology Puzzle Game</h1>
+        <h1 className="text-4xl font-bold text-gray-900">Numbers Game</h1>
       </header>
 
       {/* Instructions for the current puzzle */}
